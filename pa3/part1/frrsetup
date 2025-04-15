@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 apt -y install curl
 apt -y install gnupg
