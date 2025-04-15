@@ -13,4 +13,4 @@ COPY ./daemons /etc/frr/daemons
 COPY ./r1_frr.conf /etc/frr/frr.conf
 COPY ./frrrestart /root
 
-CMD ["bash"]
+CMD /usr/lib/frr/zebra -d -f /etc/frr/zebra.conf && /usr/lib/frr/ospfd -d -f /etc/frr/ospfd.conf && wait
