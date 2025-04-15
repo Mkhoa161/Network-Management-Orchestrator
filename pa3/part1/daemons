@@ -1,0 +1,12 @@
+# Enable OSPFv4 daemon for dynamic routing.
+ospfd=yes
+
+# Disable other routing protocol daemons not used in this topology.
+bgpd=no
+ospf6d=no
+ripd=no
+ripngd=no
+isisd=no
+pimd=no
+ldpd=no
+nhrpd=no
