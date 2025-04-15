@@ -12,4 +12,3 @@ RUN /root/frrsetup
 COPY ./daemons /etc/frr/daemons
 COPY ./r2_frr.conf /etc/frr/frr.conf
 COPY ./frrrestart /root
-COPY ./setospf.py /root
