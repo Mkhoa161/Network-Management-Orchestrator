@@ -12,3 +12,5 @@ RUN chmod +x /root/frrsetup && /root/frrsetup
 COPY ./daemons /etc/frr/daemons
 COPY ./r3_frr.conf /etc/frr/frr.conf
 COPY ./frrrestart /root
+
+CMD ["/usr/lib/frr/zebra", "-d"]

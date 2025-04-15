@@ -13,3 +13,4 @@ COPY ./daemons /etc/frr/daemons
 COPY ./r4_frr.conf /etc/frr/frr.conf
 COPY ./frrrestart /root
 
+CMD ["/usr/lib/frr/zebra", "-d"]
