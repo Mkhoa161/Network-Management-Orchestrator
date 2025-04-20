@@ -35,14 +35,14 @@ def switch_path(path):
         # Prefer R1-R2-R3: make R1-R4 cost high
         subprocess.run("docker exec part1-r1-1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 100'", shell=True)
         subprocess.run("docker exec part1-r1-1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 5'", shell=True)
-        subprocess.run("docker exec part1-r3-1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 100'", shell=True)
-        subprocess.run("docker exec part1-r3-1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 5'", shell=True)
+        subprocess.run("docker exec part1-r3-1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 5'", shell=True)
+        subprocess.run("docker exec part1-r3-1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 100'", shell=True)
     elif path == "south":
         # Prefer R1-R4-R3: make R1-R2 cost high
         subprocess.run("docker exec part1-r1-1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 100'", shell=True)
         subprocess.run("docker exec part1-r1-1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 5'", shell=True)
-        subprocess.run("docker exec part1-r3-1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 100'", shell=True)
-        subprocess.run("docker exec part1-r3-1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 5'", shell=True)
+        subprocess.run("docker exec part1-r3-1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 5'", shell=True)
+        subprocess.run("docker exec part1-r3-1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 100'", shell=True)
     else:
         print("Invalid path. Choose 'north' or 'south'.")
         return
