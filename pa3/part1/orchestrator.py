@@ -23,7 +23,6 @@ def start_ospf():
 # === Route Installation ===
 def install_routes():
     print("Installing static routes on hosts...")
-    # Replace these IPs with your actual topology
     subprocess.run("docker exec part1-ha-1 ip route add 10.0.15.0/24 via 10.0.14.4", shell=True, check=True)
     subprocess.run("docker exec part1-hb-1 ip route add 10.0.14.0/24 via 10.0.15.4", shell=True, check=True)
     print("Static routes installed.")
