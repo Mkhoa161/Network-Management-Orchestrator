@@ -59,11 +59,11 @@ def main():
     """ Main entry point. """
     example_text = '''
       Examples:
-        python3 orchestrator.py --build
-        python3 orchestrator.py --start-ospf
-        python3 orchestrator.py --install-route ha "10.0.15.0/24 via 10.0.14.4"
-        python3 orchestrator.py --install-route hb "10.0.14.0/24 via 10.0.15.4"
-        python3 orchestrator.py --switch-path north
+        ./orchestrator.py --build
+        ./orchestrator.py --start-ospf
+        ./orchestrator.py --install-route ha "10.0.15.0/24 via 10.0.14.4"
+        ./orchestrator.py --install-route hb "10.0.14.0/24 via 10.0.15.4"
+        ./orchestrator.py --switch-path north
     '''
 
     parser = argparse.ArgumentParser(
