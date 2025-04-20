@@ -6,29 +6,37 @@ import subprocess
 ROUTERS = ['r1', 'r2', 'r3', 'r4']
 HOSTS = ['ha', 'hb']
 
-# === Network Setup ===
 def build_network():
+    """ Set up the network topology. """
     print("Building network topology...")
     subprocess.run(["docker", "compose", "up", "-d"], check=True)
     print("Network started.")
 
-# === OSPF Setup ===
 def start_ospf():
+    """ Set up the OSPF daemons. """
     print("Starting OSPF daemons...")
     for router in ROUTERS:
         cmd = f"docker exec part1-{router}-1 bash -c 'service frr restart'"
         subprocess.run(cmd, shell=True, check=True)
     print("OSPF started.")
 
-# === Route Installation ===
-def install_routes():
-    print("Installing static routes on hosts...")
-    subprocess.run("docker exec part1-ha-1 ip route add 10.0.15.0/24 via 10.0.14.4", shell=True, check=True)
-    subprocess.run("docker exec part1-hb-1 ip route add 10.0.14.0/24 via 10.0.15.4", shell=True, check=True)
-    print("Static routes installed.")
+def install_route(host, route_cmd):
+    """
+    Install a static route on a given host.
 
-# === Path Switching ===
+    Parameters:
+    - host (str): Name of the container (e.g., "ha", "hb")
+    - route_cmd (str): Route command after 'ip route add', e.g., "10.0.15.0/24 via 10.0.14.4"
+    """
+    print(f"Installing route on {host}: ip route add {route_cmd}")
+    try:
+        subprocess.run(f"docker exec {host} ip route add {route_cmd}", shell=True, check=True)
+        print("Route installed.")
+    except subprocess.CalledProcessError:
+        print("Failed to install route.")
+
 def switch_path(path):
+    """ Switch path. """
     print(f"Switching to {path.upper()} path...")
     if path == "north":
         # Prefer R1-R2-R3: make R1-R4 cost high
@@ -47,13 +55,30 @@ def switch_path(path):
         return
     print(f"Switched to {path.upper()} path.")
 
-# === Main Entry Point ===
 def main():
-    parser = argparse.ArgumentParser(description="Network Orchestrator Tool")
+    """ Main entry point. """
+    example_text = '''
+      Examples:
+        python3 orchestrator.py --build
+        python3 orchestrator.py --start-ospf
+        python3 orchestrator.py --install-route ha "10.0.15.0/24 via 10.0.14.4"
+        python3 orchestrator.py --install-route hb "10.0.14.0/24 via 10.0.15.4"
+        python3 orchestrator.py --switch-path north
+    '''
+
+    parser = argparse.ArgumentParser(
+        description="Network Orchestrator Tool",
+        epilog=example_text,
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+
     parser.add_argument('--build', action='store_true', help="Build the network topology with Docker Compose")
     parser.add_argument('--start-ospf', action='store_true', help="Start OSPF daemons on all routers")
-    parser.add_argument('--setup-routes', action='store_true', help="Install static routes on hosts")
-    parser.add_argument('--switch-path', choices=['north', 'south'], help="Switch routing path")
+    parser.add_argument('--install-route', nargs=2, metavar=('HOST', 'ROUTE'),
+                        help='Install custom route on a host. Format: <host> "<destination via next-hop>"')
+    parser.add_argument('--switch-path', choices=['north', 'south'],
+                        help="Switch routing path between 'north' (R1-R2-R3) and 'south' (R1-R4-R3)")
+    
 
     args = parser.parse_args()
 
@@ -61,10 +86,12 @@ def main():
         build_network()
     if args.start_ospf:
         start_ospf()
-    if args.setup_routes:
-        install_routes()
     if args.switch_path:
         switch_path(args.switch_path)
+    if args.install_route:
+        host, route_cmd = args.install_route
+        install_route(host, route_cmd)
+
 
 if __name__ == "__main__":
     main()
