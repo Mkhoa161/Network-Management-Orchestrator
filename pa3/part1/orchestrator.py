@@ -24,8 +24,8 @@ def start_ospf():
 def install_routes():
     print("Installing static routes on hosts...")
     # Replace these IPs with your actual topology
-    subprocess.run("docker exec ha ip route add 10.0.15.0/24 via 10.0.14.4", shell=True, check=True)
-    subprocess.run("docker exec hb ip route add 10.0.14.0/24 via 10.0.15.4", shell=True, check=True)
+    subprocess.run("docker exec part1-ha-1 ip route add 10.0.15.0/24 via 10.0.14.4", shell=True, check=True)
+    subprocess.run("docker exec part1-hb-1 ip route add 10.0.14.0/24 via 10.0.15.4", shell=True, check=True)
     print("Static routes installed.")
 
 # === Path Switching ===
@@ -33,12 +33,12 @@ def switch_path(path):
     print(f"Switching to {path.upper()} path...")
     if path == "north":
         # Prefer R1-R2-R3: make R1-R4 cost high
-        subprocess.run("docker exec r1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 100'", shell=True)
-        subprocess.run("docker exec r1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 5'", shell=True)
+        subprocess.run("docker exec part1-r1-1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 100'", shell=True)
+        subprocess.run("docker exec part1-r1-1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 5'", shell=True)
     elif path == "south":
         # Prefer R1-R4-R3: make R1-R2 cost high
-        subprocess.run("docker exec r1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 100'", shell=True)
-        subprocess.run("docker exec r1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 5'", shell=True)
+        subprocess.run("docker exec part1-r1-1 vtysh -c 'conf t' -c 'interface eth0' -c 'ip ospf cost 100'", shell=True)
+        subprocess.run("docker exec part1-r1-1 vtysh -c 'conf t' -c 'interface eth1' -c 'ip ospf cost 5'", shell=True)
     else:
         print("Invalid path. Choose 'north' or 'south'.")
         return
