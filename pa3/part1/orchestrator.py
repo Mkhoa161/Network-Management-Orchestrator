@@ -16,7 +16,7 @@ def build_network():
 def start_ospf():
     print("Starting OSPF daemons...")
     for router in ROUTERS:
-        cmd = f"docker exec {router} bash -c 'service frr restart'"
+        cmd = f"docker exec part1-{router}-1 bash -c 'service frr restart'"
         subprocess.run(cmd, shell=True, check=True)
     print("OSPF started.")
 
