@@ -61,8 +61,8 @@ def main():
       Examples:
         ./orchestrator.py --build
         ./orchestrator.py --start-ospf
-        ./orchestrator.py --install-route ha "10.0.15.0/24 via 10.0.14.4"
-        ./orchestrator.py --install-route hb "10.0.14.0/24 via 10.0.15.4"
+        ./orchestrator.py --install-route part1-ha-1 "10.0.15.0/24 via 10.0.14.4"
+        ./orchestrator.py --install-route part1-hb-1 "10.0.14.0/24 via 10.0.15.4"
         ./orchestrator.py --switch-path north
     '''
 
